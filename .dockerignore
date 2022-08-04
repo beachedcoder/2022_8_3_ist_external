@@ -1,5 +1,6 @@
 .git
 test
+tmp
 node_modules
 *.sql
 *.yaml
