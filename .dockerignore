@@ -1,0 +1,9 @@
+.git
+test
+node_modules
+*.sql
+*.yaml
+.gitignore
+
+yaml
+log
