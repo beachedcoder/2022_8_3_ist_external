@@ -9,21 +9,21 @@
 //      roidtc-august22-u600
 //      dockerHub  //id of your global docker credentials in Jenkins https://www.google.com/search?q=add+docker+credentials+Jenkins&oq=add+docker+credentials+Jenkins
 //      https://github.com/beachedcoder/2022_8_3_ist_external.git
-//      [DOCKERID]
-//      [APPNAME]
-//      [CLUSTER_NAME] 
-//      [ZONE]. //THIS NEEDS TO CHANGE FOR THE AWS VERSION
-//      [NAMESPACE]
+//      beachcoder
+//      external
+//      cluster-1 
+//      us-central1-c. //THIS NEEDS TO CHANGE FOR THE AWS VERSION
+//      default
 //      the following values can be found in the yaml:
-//      [DEPLOYMENT_NAME]
-//      [CONTAINER_NAME] (name of the container to be replaced - in the template/spec section of the deployment)
+//      demo-ui-deployment
+//      demo-ui-container (name of the container to be replaced - in the template/spec section of the deployment)
 
 
 pipeline {
     agent any 
    environment {
         registryCredential = 'dockerHub'
-        imageName = '[DOCKERID]/[APPNAME]'
+        imageName = 'beachcoder/external'
         dockerImage = ''
         }
     stages {
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 sh "rm -rf ${WORKSPACE}/kube/"
                 echo 'Get cluster credentials'
-                sh 'gcloud container clusters get-credentials [CLUSTER_NAME] --zone [ZONE] --project roidtc-august22-u600'
+                sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project roidtc-august22-u600'
             }
         }     
          stage('update k8s') {
@@ -88,7 +88,7 @@ pipeline {
                     }
             steps {
                 echo 'Set the image'
-                     sh "kubectl --kubeconfig=${WORKSPACE}/kube/.kube/config set image deployment/[DEPLOYMENT_NAME] [CONTAINER_NAME]=${env.imageName}:${env.BUILD_NUMBER}"
+                     sh "kubectl --kubeconfig=${WORKSPACE}/kube/.kube/config set image deployment/demo-ui-deployment demo-ui-container=${env.imageName}:${env.BUILD_NUMBER}"
             }
         }     
         stage('Remove local docker image') {
