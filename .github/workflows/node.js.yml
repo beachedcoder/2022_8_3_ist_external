@@ -26,3 +26,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    
+    - uses: actions/checkout@v3
+    - name: Use docker CLI to build images
+      uses: actions/setup-node@v3
+    - run: docker build . --file Dockerfile --tag external:$(date +%s)
